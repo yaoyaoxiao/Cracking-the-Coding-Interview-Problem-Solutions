@@ -34,5 +34,42 @@ boolean isPalindrome(LinkedListNode node){
 2. need to use a arapper class since the recursive call should return both the result (whether the sublist is a palindrome) and the 'last' node which is need to be compared with the 'first' node.
 */
 
+boolean isPalindrome2(LinkedListNode node){
+	int len = getLength(node);
+	ResultAndEndNode res = isPalindrome(node, len);
+	return res.result;
+}
 
+ResultAndEndNode isPalindrome(LinkedListNode node, int len){
+	if (node == null || len <= 0){ //even number of nodes
+		return new ResultAndEndNode(node, true);
+	}
+	else if(len == 1){ // odd number of nodes
+		return new ResultAndEndNode(node.next, true);
+	}
+
+	ResultAndEndNode innerResult = isPalindrome(node.next, len-2);
+	if (!innerResult.result || innerResult.node == null){
+		return innerResult;
+	}
+
+	innerResult.result = innerResult.node.data == node.data;
+	innerResult.node = innerResult.node.next;
+
+	return innerResult;
+}
+
+int getLength(LinkedListNode node){
+	int len = 0;
+	while (node != null){
+		len ++; 
+		node = node.next;
+	}
+	return len;
+}
+
+public class ResultAndEndNode{
+	public LinkedListNode node;
+	public boolean result;
+}
 
